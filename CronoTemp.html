@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cronómetro y Temporizador</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Estilos para el cuerpo y contenedor principal */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ecf0f1; /* Fondo más suave */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 800px;
+      background-color: #fff; /* Fondo del contenedor principal */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    /* Estilos para las áreas del cronómetro y temporizador */
+    .area {
+      width: 350px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f5f5f5; /* Fondo de las áreas */
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .cronometro-area {
+      background-color: #d6eaf8;
+    }
+
+    .temporizador-area {
+      background-color: #f8c471;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      color: #333;
+    }
+
+    /* Estilos para los botones */
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Estilos para los íconos */
+    .icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 40px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="area cronometro-area">
+      <i class="fas fa-stopwatch icon"></i> <!-- Ícono de cronómetro -->
+      <h1>Cronómetro</h1>
+      <div id="cronometro">00:00:00</div>
+      <button onclick="startCronometro()">Iniciar</button>
+      <button onclick="stopCronometro()">Detener</button>
+      <button onclick="resetCronometro()">Reiniciar</button>
+    </div>
+
+    <div class="area temporizador-area">
+      <i class="fas fa-hourglass-half icon"></i> <!-- Ícono de reloj de arena -->
+      <h1>Temporizador</h1>
+      <input type="text" id="tiempo" placeholder="Ingrese tiempo (en segundos)">
+      <button onclick="startTemporizador()">Iniciar</button>
+      <button onclick="stopTemporizador()">Detener</button>
+
+
+
+
+
+
+    <div class="alert-box" id="alertBox">
+        <p id="alertMessage"></p>
+        <button class="close-btn" onclick="hideAlert()">Cerrar</button>
+      </div>
+  </div>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+  <script>
+    let cronometro;
+    let temporizador;
+
+    function startCronometro() {
+      let segundos = 0;
+      let minutos = 0;
+      let horas = 0;
+
+      cronometro = setInterval(function () {
+        segundos++;
+
+        if (segundos === 60) {
+          segundos = 0;
+          minutos++;
+
+          if (minutos === 60) {
+            minutos = 0;
+            horas++;
+          }
+        }
+
+        const format = `${(horas < 10 ? '0' : '') + horas}:${(minutos < 10 ? '0' : '') + minutos}:${(segundos < 10 ? '0' : '') + segundos}`;
+        document.getElementById('cronometro').innerText = format;
+      }, 1000);
+    }
+
+    function stopCronometro() {
+      clearInterval(cronometro);
+    }
+
+    function resetCronometro() {
+      clearInterval(cronometro);
+      document.getElementById('cronometro').innerText = '00:00:00';
+    }
+
+    function startTemporizador() {
+      const tiempoInput = document.getElementById('tiempo').value;
+      const tiempo = parseInt(tiempoInput, 10);
+
+      if (!isNaN(tiempo) && tiempo > 0) {
+        temporizador = setTimeout(function () {
+          alert('¡Tiempo finalizado!');
+        }, tiempo * 1000);
+      } else {
+        alert('Ingrese un valor válido en segundos para el temporizador.');
+      }
+    }
+
+    function stopTemporizador() {
+      clearTimeout(temporizador);
+    }
+
+        function showAlert(message) {
+      const alertBox = document.getElementById('alertBox');
+      const alertMessage = document.getElementById('alertMessage');
+
+      alertMessage.innerText = message;
+      alertBox.style.display = 'block';
+    }
+
+    function hideAlert() {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.style.display = 'none';
+    }
+
+    function startTemporizador() {
+      const tiempoInput = document.getElementById('tiempo').value;
+      const tiempo = parseInt(tiempoInput, 10);
+
+      if (!isNaN(tiempo) && tiempo > 0) {
+        temporizador = setTimeout(function () {
+          showAlert('¡Tiempo finalizado!');
+        }, tiempo * 1000);
+      } else {
+        showAlert('Ingrese un valor válido en segundos para el temporizador.');
+      }
+    }
+
+    function stopTemporizador() {
+      clearTimeout(temporizador);
+      hideAlert();
+    }
+
+
+
+
+
+ //ALERTA PERSONALIZADO
+    function showAlert(message) {
+        const alertBox = document.getElementById('alertBox');
+        const alertMessage = document.getElementById('alertMessage');
+  
+        alertMessage.innerText = message;
+        alertBox.style.display = 'block';
+      }
+  
+      function hideAlert() {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.style.display = 'none';
+      }
+  
+      function startTemporizador() {
+        const tiempoInput = document.getElementById('tiempo').value;
+        const tiempo = parseInt(tiempoInput, 10);
+  
+        if (!isNaN(tiempo) && tiempo > 0) {
+          temporizador = setTimeout(function () {
+            showAlert('¡Tiempo finalizado!');
+          }, tiempo * 1000);
+        } else {
+          showAlert('Ingrese un valor válido en segundos para el temporizador.');
+        }
+      }
+  
+      function stopTemporizador() {
+        clearTimeout(temporizador);
+        hideAlert();
+      }
+  </script>
+</body>
+</html>
